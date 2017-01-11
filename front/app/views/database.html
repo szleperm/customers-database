@@ -22,7 +22,7 @@
                     <label class="col-sm-2 control-label" for="nipNumber">NIP</label>                
                     <div class="col-sm-8">                
                         <input type="text" ng-model="database.customer.nipNumber" name="nipNumber" id="nipNumber" class="form-control" placeholder="NIP" 
-                               required ng-pattern="/[0-9]{10}/">                                       
+                               required ng-pattern="/^[0-9]{10}$/">                                       
                     </div>                      
                     <p class="help-block" ng-show="form.customerForm.nipNumber.$error.required && form.customerForm.nipNumber.$dirty">                    
                         Nip may not be empty                        
