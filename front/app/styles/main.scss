@@ -1,0 +1,78 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+// bower:scss
+@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+// endbower
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+.view{
+    position: relative;
+    transition: 200ms;
+}
+
+.view.ng-enter{
+    position: absolute;
+    width: 100%;
+    left: -100%;
+}
+
+.view.ng-enter.ng-enter-active{
+    left: 0%;
+}
+
+.view.ng-leave{
+    position: absolute;
+    width: 100%;
+    left: 0%;
+}
+
+.view.ng-leave.ng-leave-active{
+    left: 100%;
+}
+
+.table-filter{
+	cursor: pointer;
+	cursor: hand;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+ 
+  .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+  }
+}
+
+.st-sort-ascent:after{
+    padding-left: 5px;
+    content: '\e155';
+    font-family: 'Glyphicons Halflings';
+    font-size: x-small;
+  }
+
+.st-sort-descent:after{
+    padding-left: 5px;
+    content: '\e156';
+    font-family: 'Glyphicons Halflings';
+    font-size: x-small;
+  }
+
+
+

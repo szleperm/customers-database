@@ -1,0 +1,107 @@
+<div class="container">
+<div class="page-header">
+  <p class="lead"><img src="images/customers2.png" height="20" alt="Customers"><br></p>  
+</div>
+<div ng-if="database.customers.length > 0">    
+    <div class="container-fluid">
+            <form ng-submit="database.submit()" name="form.customerForm" class="form-horizontal">         
+                <input type="hidden" ng-model="database.customer.id" />                    
+                <div class="form-group" ng-class="{'has-error': form.customerForm.cname.$invalid && form.customerForm.cname.$dirty}">               
+                    <label class="col-sm-2 control-label" for="cname">Name</label>              
+                    <div class="col-sm-8">                    
+                        <input type="text" ng-model="database.customer.name" name="cname" id="cname" class="form-control" placeholder="Name"
+                               required ng-minlength="3" ng-maxlength="150"/>                                     
+                    </div>                            
+                    <p class="help-block" ng-show="form.customerForm.cname.$error.minlength">Name is too short</p>                     
+                    <p class="help-block" ng-show="form.customerForm.cname.$error.required && form.customerForm.cname.$dirty">                    
+                        Name may not be empty                        
+                    </p>                   
+                    <p class="help-block" ng-show="form.customerForm.cname.$error.maxlength">Name is too long</p>
+                </div>               
+                <div class="form-group" ng-class="{'has-error': form.customerForm.nipNumber.$invalid && form.customerForm.nipNumber.$dirty}">            
+                    <label class="col-sm-2 control-label" for="nipNumber">NIP</label>                
+                    <div class="col-sm-8">                
+                        <input type="text" ng-model="database.customer.nipNumber" name="nipNumber" id="nipNumber" class="form-control" placeholder="NIP" 
+                               required ng-pattern="/[0-9]{10}/">                                       
+                    </div>                      
+                    <p class="help-block" ng-show="form.customerForm.nipNumber.$error.required && form.customerForm.nipNumber.$dirty">                    
+                        Nip may not be empty                        
+                    </p>
+                     <p class="help-block" ng-show="form.customerForm.nipNumber.$error.pattern">Nip must be 10 digits</p>
+                </div>              
+                <div class="form-group" ng-class="{'has-error': form.customerForm.address.$invalid && form.customerForm.address.$dirty}">                
+                    <label class="col-sm-2 control-label" for="address">Address</label>                
+                    <div class="col-sm-8">                                   
+                        <input type="text" ng-model="database.customer.address" name="address" id="address" class="form-control" 
+                               placeholder="Adress" required ng-minlength="3" ng-maxlength="150"/>                    
+                    </div>                                 
+                        <p class="help-block" ng-show="form.customerForm.address.$error.minlength">Addres is too short</p>                   
+                        <p class="help-block" ng-show="form.customerForm.address.$error.required && form.customerForm.address.$dirty">
+                         Addres may not be empty                   
+                        </p>                    
+                        <p class="help-block" ng-show="form.customerForm.address.$error.maxlength">Addres is too long</p>
+                </div>                
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8">
+                        <input type="submit"  value="{{!database.customer.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="form.customerForm.$invalid">                
+                        <button type="button" ng-click="database.reset()" class="btn btn-default btn-sm" ng-disabled="form.customerForm.$pristine"><span class="glyphicon glyphicon-erase"></span> Reset Form</button>                
+                    </div>
+                </div>         
+            </form>
+    </div>
+    <table st-table="displayedCollection" st-safe-src='database.customers' class="table table-hover">	
+        <thead>        
+            <tr>	
+                <th colspan="5">                
+                    <div class="form-group form-inline">        
+                                <div class="input-group col-sm-4">
+                                    <input st-search placeholder="search..." class="form-control" type="text"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </span>
+                                </div>
+			        <div class="input-group col-sm-2">
+                                    <input ng-model="itemsByPage" placeholder="items/page" class="form-control" type="text"/>
+                                    <span class="input-group-addon">
+                                        on page
+                                    </span>
+                                </div>
+                            </div>
+			</th>
+		</tr>
+                <tr class="active">
+			<th st-sort="id" st-sort-default="true" class="col-sm-1"><span class="table-filter">Id</span></th>
+                        <th st-sort="name" class="col-sm-4"><span class="table-filter">Name</span></th>
+                        <th st-sort="nipNumber" class="col-sm-2"><span class="table-filter">NIP</span></th>
+                        <th st-sort="address" class="col-sm-3"><span class="table-filter">Address</span></th>
+                        <th class="col-sm-2">Actions</th>
+                </tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="customer in displayedCollection">
+			<td>{{customer.id}}</td>
+			<td>{{customer.name | uppercase}}</td>
+			<td>{{customer.nipNumber}}</td>
+			<td>{{customer.address}}</td>
+                        <td>
+                            <button ng-click="database.edit(customer.id)" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-edit"></span> Edit</button>
+                            <button ng-click="database.remove(customer.id)" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Remove</button>
+                        </td>			
+		</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="5" class="text-center">
+					<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+<div ng-if="database.customers.length === 0">
+  <div class="alert alert-danger" role="alert">
+    No results found! :(
+  </div>
+</div>
+</div>
+<div ng-include="'footer.html'"></div>

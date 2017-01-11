@@ -62,11 +62,6 @@
 			<version>${hibernate.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>5.2.4.Final</version>
-		</dependency>
 
 		<!-- Spring Data -->
 		<dependency>
@@ -101,8 +96,6 @@
 			<version>1.7.21</version>
 		</dependency>
 
-		
-		
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -128,6 +121,12 @@
 			<version>3.0.0</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.2.4.Final</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -135,6 +134,14 @@
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.1.3.v20140225</version>
+				<configuration>
+					<webAppConfig>
+						<contextPath>/customers-database</contextPath>
+						<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
+							<resourcesAsCSV>front/dist/</resourcesAsCSV>
+						</baseResource>
+					</webAppConfig>
+				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.ow2.asm</groupId>
@@ -162,6 +169,11 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
+					<webResources>
+						<resource>
+							<directory>front/dist</directory>
+						</resource>
+					</webResources>
 					<warSourceDirectory>src/main/webapp</warSourceDirectory>
 					<warName>customers-database</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
