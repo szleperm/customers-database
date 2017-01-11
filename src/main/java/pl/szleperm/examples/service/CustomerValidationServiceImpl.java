@@ -1,5 +1,7 @@
 package pl.szleperm.examples.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,33 +23,24 @@ public class CustomerValidationServiceImpl implements CustomerValidationService 
 
 	@Override
 	public boolean isNewCustomerValid(Customer customer) {
-		Customer result = customerRepository.findByNipNumber(customer.getNipNumber());
-		if (customer.getId() == null && result == null) {
-			return true;
-		} else {
-			return false;
-		}
+		
+		return customerRepository.findByNipNumber(customer.getNipNumber())
+							.map(c -> !(customer.getId() == null))
+							.orElse(customer.getId()== null);	
 	}
 
 	@Override
 	public boolean isCustomerExist(long id) {
-		if (customerRepository.findOne(id) == null) {
-			return false;
-		} else {
-			return true;
-		}
+		return Optional.ofNullable(customerRepository.findOne(id))
+					.map(c -> true)
+					.orElse(false);
 	}
 
 	@Override
 	public boolean isUpdatedCustomerValid(Customer customer) {
-		Customer result = customerRepository.findByNipNumber(customer.getNipNumber());
-		if (result == null) {
-			return true;
-		}else if(customer.getId() == result.getId()){
-			return true;
-		}else{
-			return false;
-		}
+		return customerRepository.findByNipNumber(customer.getNipNumber())
+						.map(c -> c.getId() == customer.getId())
+						.orElse(true);		
 	}
 
 }

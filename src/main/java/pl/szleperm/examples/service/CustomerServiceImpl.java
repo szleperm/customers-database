@@ -33,14 +33,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer update(Customer customer) {
-		Customer customerOld = customerRepository.findOne(customer.getId());
-		customerOld.setName(customer.getName());
-		customerOld.setNipNumber(customer.getNipNumber());
-		customerOld.setAddress(customer.getAddress());
 		return customerRepository.save(customer);
 	}	
 	
-
+	@Override
 	public void delete(long id) {
 		customerRepository.delete(id);
 	}

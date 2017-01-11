@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,7 +41,7 @@ public class CustomerValidationServiceTest {
 		Customer customer = new Customer();
 		customer.setNipNumber("nip");
 		//when
-		when(customerRepository.findByNipNumber("nip")).thenReturn(null);
+		when(customerRepository.findByNipNumber("nip")).thenReturn(Optional.ofNullable(null));
 		boolean result = validationService.isNewCustomerValid(customer);
 		//then
 		Assert.assertEquals(true, result);
@@ -54,7 +55,7 @@ public class CustomerValidationServiceTest {
 		customer.setNipNumber("nip");
 		customer.setId(1L);
 		//when
-		when(customerRepository.findByNipNumber("nip")).thenReturn(null);
+		when(customerRepository.findByNipNumber("nip")).thenReturn(Optional.ofNullable(null));
 		boolean result = validationService.isNewCustomerValid(customer);
 		//then
 		Assert.assertEquals(false, result);
@@ -66,7 +67,7 @@ public class CustomerValidationServiceTest {
 		Customer customer = new Customer();
 		customer.setNipNumber("nip");
 		//when
-		when(customerRepository.findByNipNumber("nip")).thenReturn(customers.get(0));
+		when(customerRepository.findByNipNumber("nip")).thenReturn(Optional.of(customers.get(0)));
 		boolean result = validationService.isNewCustomerValid(customer);
 		//then
 		Assert.assertEquals(false, result);
@@ -104,7 +105,7 @@ public class CustomerValidationServiceTest {
 		Customer customer1 = customers.get(0);
 		Customer customer2 = customers.get(1);
 		//when
-		when(customerRepository.findByNipNumber(customer1.getNipNumber())).thenReturn(customer2);
+		when(customerRepository.findByNipNumber(customer1.getNipNumber())).thenReturn(Optional.of(customer2));
 		boolean result = validationService.isUpdatedCustomerValid(customer1);
 		//then
 		Assert.assertEquals(false, result);
@@ -117,8 +118,8 @@ public class CustomerValidationServiceTest {
 		Customer customer1 = customers.get(0);
 		Customer customer2 = customers.get(1);
 		//when
-		when(customerRepository.findByNipNumber(customer1.getNipNumber())).thenReturn(customer1);
-		when(customerRepository.findByNipNumber(customer2.getNipNumber())).thenReturn(null);
+		when(customerRepository.findByNipNumber(customer1.getNipNumber())).thenReturn(Optional.of(customer1));
+		when(customerRepository.findByNipNumber(customer2.getNipNumber())).thenReturn(Optional.ofNullable(null));
 		boolean result1 = validationService.isUpdatedCustomerValid(customer1);
 		boolean result2 = validationService.isUpdatedCustomerValid(customer2);
 		//then

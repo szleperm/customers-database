@@ -1,5 +1,7 @@
 package pl.szleperm.examples.repository;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.junit.Assert;
@@ -25,10 +27,10 @@ public class CustomerRepositoryTest {
 		//given
 		Customer customer = new Customer(2L , "Greenholt and Sons", "6103539281", "16894 Evergreen Pass");
 		//when
-		Customer result = customerRepository.findByNipNumber("6103539281");
+		Optional<Customer> result = customerRepository.findByNipNumber("6103539281");
 		//then
-		Assert.assertEquals(customer, result);
-		Assert.assertEquals(customer.getName(), result.getName());
-		Assert.assertEquals(customer.getAddress(), result.getAddress());
+		Assert.assertEquals(customer, result.get());
+		Assert.assertEquals(customer.getName(), result.get().getName());
+		Assert.assertEquals(customer.getAddress(), result.get().getAddress());
 	}
 }
