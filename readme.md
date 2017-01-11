@@ -1,6 +1,6 @@
 #customers-database
 
-Example CRUD RESTful web application 
+Example CRUD RESTful web application with AngularJS front-end
 
 Used technologies:
 
@@ -44,4 +44,9 @@ In your preferred IDE such as SpringSource Tool Suite (STS) or IDEA:
 * Import customers-database as a Maven Project
 * Run on server in your IDE
 
-Access the deployed web application at: http://localhost:8080/customers-database/
+Access to the application
+-------------------------
+
+Default access the web application at: http://localhost:8080/customers-database/
+
+Default access the REST API at: http://localhost:8080/customers-database/api/customers
