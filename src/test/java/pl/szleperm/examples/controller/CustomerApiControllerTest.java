@@ -57,16 +57,6 @@ public class CustomerApiControllerTest {
 	}
 
 	@Test
-	public void shouldGiveNoContentStatusWhenCustomersListIsEmpty() {
-		// given
-		// when
-		when(customerService.findAll()).thenReturn(new ArrayList<>());
-		ResponseEntity<List<Customer>> responseEntity = apiController.getAllCustomers();
-		// then
-		Assert.assertEquals(responseEntity.getStatusCode(), HttpStatus.NO_CONTENT);
-	}
-
-	@Test
 	public void shouldGiveOneCustomer() {
 		// given
 		long id = 1;
