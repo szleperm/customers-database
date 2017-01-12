@@ -1,4 +1,4 @@
-#customers-database
+#CUSTOMERS DATABASE
 
 Example CRUD RESTful web application with AngularJS front-end
 
@@ -26,7 +26,7 @@ Clone the repository:
 
 To run the application:
 -------------------	
-Front-end in this application is based on Node.js, Bower and Grunt, so the first requirement is to have npm (Node Packaged Module) installed on your machine. If you don't have it yet, install Node.js from the [Node.js website](https://nodejs.org/) (prefer an LTS version). This will also install npm.
+Front-end in this application is based on Node.js, Bower and Grunt, so the first requirement is to have Node.js with npm installed on your machine. If you don't have it yet, install Node.js from the [Node.js website](https://nodejs.org/) (prefer an LTS version). This will also install npm.
 
 From the command line:
 
