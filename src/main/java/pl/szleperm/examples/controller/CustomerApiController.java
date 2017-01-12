@@ -2,6 +2,7 @@ package pl.szleperm.examples.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -32,7 +33,6 @@ import pl.szleperm.examples.service.CustomerValidationService;
 public class CustomerApiController {
 
 	private static final Logger logger = Logger.getLogger(CustomerApiController.class);
-
 	
 	protected CustomerService customerService;
 	protected CustomerValidationService customerValidationService;
@@ -49,70 +49,67 @@ public class CustomerApiController {
 		infoLog("Get all customers");
 		List<Customer> customers = customerService.findAll();
 		if (customers.isEmpty()) {
-			infoLog("Customers list is empty");
-			return new ResponseEntity<List<Customer>>(HttpStatus.NO_CONTENT);
+			return infoLog(new ResponseEntity<List<Customer>>(HttpStatus.NO_CONTENT));
+		} else {
+			return infoLog(new ResponseEntity<List<Customer>>(customers, HttpStatus.OK));
 		}
-		infoLog("Found " + customers.size() + " customer(s)");
-		return new ResponseEntity<List<Customer>>(customers, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/customers/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Customer> getCustomer(@PathVariable("id") long id) {
 		infoLog("Get customer with id: " + id);
-		Customer customer = customerService.findById(id);
-		if (customer == null) {
-			infoLog("Customer with id: " + id + " not found");
-			return new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
-		}
-		infoLog("Found customer with id: " + id);
-		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+		return Optional.ofNullable(customerService.findById(id))
+				.map(c -> infoLog(new ResponseEntity<Customer>(c, HttpStatus.OK)))
+				.orElseGet(() -> infoLog(new ResponseEntity<Customer>(HttpStatus.NOT_FOUND)));
 	}
 
 	@RequestMapping(value = "/customers", method = RequestMethod.POST)
 	public ResponseEntity<Void> createCustomer(@Valid @RequestBody Customer customer, UriComponentsBuilder builder) {
 		infoLog("Create customer with NIP " + customer.getNipNumber());
 		if (!customerValidationService.isNewCustomerValid(customer)) {
-			infoLog("Customer with NIP " + customer.getNipNumber()+ " exist");
-			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			return infoLog(new ResponseEntity<Void>(HttpStatus.CONFLICT));
 		}
 		customerService.saveCustomer(customer);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(builder.path("api/customers/{id}").buildAndExpand(customer.getId()).toUri());
-		return new ResponseEntity<Void>(headers,HttpStatus.CREATED);
+		return infoLog(new ResponseEntity<Void>(headers,HttpStatus.CREATED));
 	}
 	
 	@RequestMapping(value = "/customers/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Customer> updateCustomer(@PathVariable("id") long id,@Valid @RequestBody Customer customer){
 		infoLog("Update customer with id " + id);
 		if (!customerValidationService.isCustomerExist(id)){
-			infoLog("Customer with id " + id + " not found");
-			return new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
+			return infoLog(new ResponseEntity<Customer>(HttpStatus.NOT_FOUND));
 		}
 		if (!customerValidationService.isUpdatedCustomerValid(customer)){
-			infoLog("Not unique customer NIP");
-			return new ResponseEntity<Customer>(HttpStatus.CONFLICT);
+			return infoLog(new ResponseEntity<Customer>(HttpStatus.CONFLICT));
 		}
 		Customer currentCustomer = customerService.update(customer);
-		return new ResponseEntity<Customer>(currentCustomer, HttpStatus.OK);
+		return infoLog(new ResponseEntity<Customer>(currentCustomer, HttpStatus.OK));
 	}
 	
 	@RequestMapping(value="/customers/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") long id){
 		infoLog("Delete customer with id " + id);
-		Customer customer = customerService.findById(id);
-		if (customer==null){
-			infoLog("Customer with id " + id +" not found");
-			return new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
-		}
-		customerService.delete(id);
-		return new ResponseEntity<Customer>(HttpStatus.NO_CONTENT);
+		return Optional.ofNullable(customerService.findById(id))
+					.map(c -> {
+						customerService.delete(id);
+						return infoLog(new ResponseEntity<Customer>(HttpStatus.NO_CONTENT));
+					})
+					.orElseGet(() -> infoLog(new ResponseEntity<Customer>(HttpStatus.NOT_FOUND)));
 	}
 	
 	@RequestMapping(value="/customers", method=RequestMethod.DELETE)
 	public ResponseEntity<Customer> deleteAll(){
 		infoLog("Delete all customers");
 		customerService.deleteAll();
-		return new ResponseEntity<Customer>(HttpStatus.NO_CONTENT);
+		return infoLog(new ResponseEntity<Customer>(HttpStatus.NO_CONTENT));
+	}
+	
+	private <T> ResponseEntity<T> infoLog(ResponseEntity<T> responseEntity){
+		HttpStatus statusCode = responseEntity.getStatusCode();
+		infoLog("Returned status code: " + statusCode + " " + statusCode.getReasonPhrase());
+		return responseEntity;
 	}
 	
 	private void infoLog(String message) {

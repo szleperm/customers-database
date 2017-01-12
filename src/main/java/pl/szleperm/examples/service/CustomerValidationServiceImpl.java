@@ -22,8 +22,7 @@ public class CustomerValidationServiceImpl implements CustomerValidationService 
 	}
 
 	@Override
-	public boolean isNewCustomerValid(Customer customer) {
-		
+	public boolean isNewCustomerValid(Customer customer) {	
 		return customerRepository.findByNipNumber(customer.getNipNumber())
 							.map(c -> !(customer.getId() == null))
 							.orElse(customer.getId()== null);	
